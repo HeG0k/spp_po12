@@ -5,7 +5,6 @@ import pytest
 import shopping
 from shopping import Cart, apply_coupon, log_purchase
 from lab_1 import all_elements_equal, find_two_sum
-from task_3 import repeat
 
 # Задание 1
 
