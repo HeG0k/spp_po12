@@ -1,6 +1,6 @@
+import time
 import tkinter as tk
 from PIL import Image, ImageTk, ImageGrab
-import time
 
 
 class MandelbrotApp:
@@ -11,7 +11,6 @@ class MandelbrotApp:
         self.canvas = tk.Canvas(root, width=600, height=500, bg="white")
         self.canvas.pack()
 
-        # Панель управления
         controls = tk.Frame(root)
         controls.pack(pady=5)
 
@@ -33,7 +32,8 @@ class MandelbrotApp:
         tk.Button(controls, text="Старт", command=self.start).grid(row=0, column=6)
         tk.Button(controls, text="Скриншот", command=self.screenshot).grid(row=0, column=7)
 
-        self.image = None
+        self.img = None
+        self.photo = None
 
     def mandelbrot(self, c, max_iter):
         z = 0
@@ -77,15 +77,14 @@ class MandelbrotApp:
 
     def screenshot(self):
         self.canvas.update()
-
         x = self.canvas.winfo_rootx()
         y = self.canvas.winfo_rooty()
         x1 = x + self.canvas.winfo_width()
         y1 = y + self.canvas.winfo_height()
-
         ImageGrab.grab().crop((x, y, x1, y1)).save(f"screenshot_mandelbrot_{int(time.time())}.png")
 
 
-root = tk.Tk()
-app = MandelbrotApp(root)
-root.mainloop()
+if __name__ == "__main__":
+    main_root = tk.Tk()
+    app = MandelbrotApp(main_root)
+    main_root.mainloop()

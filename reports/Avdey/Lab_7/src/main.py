@@ -24,7 +24,6 @@ class Triangle:
         A1 = self.area(point, self.p2, self.p3)
         A2 = self.area(self.p1, point, self.p3)
         A3 = self.area(self.p1, self.p2, point)
-
         return abs(A - (A1 + A2 + A3)) < 0.5
 
 
@@ -32,11 +31,20 @@ class App:
     def __init__(self, root):
         self.root = root
         self.root.title("Triangle Visualization")
+        self.running = False
+        self.points = []  # Инициализация атрибута points
 
-        self.canvas = tk.Canvas(root, width=600, height=500, bg="white")
+        self.create_canvas()
+        self.create_controls()
+        self.create_triangle_inputs()
+        self.update_triangle()
+
+    def create_canvas(self):
+        self.canvas = tk.Canvas(self.root, width=600, height=500, bg="white")
         self.canvas.pack()
 
-        controls = tk.Frame(root)
+    def create_controls(self):
+        controls = tk.Frame(self.root)
         controls.pack(pady=5)
 
         # Количество точек
@@ -51,12 +59,13 @@ class App:
         self.speed.set(50)
         self.speed.grid(row=0, column=3)
 
+        # Кнопки
         tk.Button(controls, text="Старт", command=self.start).grid(row=0, column=4)
         tk.Button(controls, text="Пауза", command=self.pause).grid(row=0, column=5)
         tk.Button(controls, text="Скриншот", command=self.screenshot).grid(row=0, column=6)
 
-        # Ввод координат треугольника
-        triangle_frame = tk.LabelFrame(root, text="Координаты треугольника")
+    def create_triangle_inputs(self):
+        triangle_frame = tk.LabelFrame(self.root, text="Координаты треугольника")
         triangle_frame.pack(pady=5)
 
         tk.Label(triangle_frame, text="P1 (x,y)").grid(row=0, column=0)
@@ -86,9 +95,6 @@ class App:
         tk.Button(triangle_frame, text="Обновить треугольник", command=self.update_triangle).grid(
             row=0, column=9, padx=10
         )
-
-        self.running = False
-        self.update_triangle()
 
     def update_triangle(self):
         try:
@@ -133,7 +139,6 @@ class App:
 
         for point in self.points:
             color = "green" if self.triangle.contains(point) else "red"
-
             self.canvas.create_oval(point.x - 3, point.y - 3, point.x + 3, point.y + 3, fill=color, tags="points")
 
         delay = 101 - self.speed.get()
@@ -146,7 +151,6 @@ class App:
 
     def screenshot(self):
         self.canvas.update()
-
         x = self.canvas.winfo_rootx()
         y = self.canvas.winfo_rooty()
         x1 = x + self.canvas.winfo_width()
@@ -155,6 +159,7 @@ class App:
         ImageGrab.grab().crop((x, y, x1, y1)).save(f"screenshot_{int(time.time())}.png")
 
 
-root = tk.Tk()
-app = App(root)
-root.mainloop()
+if __name__ == "__main__":
+    main_root = tk.Tk()
+    app = App(main_root)
+    main_root.mainloop()
