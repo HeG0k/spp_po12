@@ -7,20 +7,20 @@ def cart():
     return Cart()
 
 
-def test_add_item(cart):
-    cart.add_item("Apple", 10.0)
-    assert len(cart.items) == 1
+def test_add_item(cart_item):
+    cart_item.add_item("Apple", 10.0)
+    assert len(cart_item.items) == 1
 
 
-def test_add_item_negative_price(cart):
+def test_add_item_negative_price(cart_item):
     with pytest.raises(ValueError):
-        cart.add_item("Apple", -5.0)
+        cart_item.add_item("Apple", -5.0)
 
 
-def test_total(cart):
-    cart.add_item("Apple", 10.0)
-    cart.add_item("Banana", 5.0)
-    assert cart.total() == 15.0
+def test_total(cart_item):
+    cart_item.add_item("Apple", 10.0)
+    cart_item.add_item("Banana", 5.0)
+    assert cart_item.total() == 15.0
 
 
 @pytest.mark.parametrize(
@@ -31,17 +31,17 @@ def test_total(cart):
         (100, 0.0),
     ],
 )
-def test_apply_discount_valid(cart, discount, expected):
-    cart.add_item("Item", 100.0)
-    cart.apply_discount(discount)
-    assert cart.total() == expected
+def test_apply_discount_valid(cart_item, discount, expected):
+    cart_item.add_item("Item", 100.0)
+    cart_item.apply_discount(discount)
+    assert cart_item.total() == expected
 
 
 @pytest.mark.parametrize("discount", [-10, 150])
-def test_apply_discount_invalid(cart, discount):
-    cart.add_item("Item", 100.0)
+def test_apply_discount_invalid(cart_item, discount):
+    cart_item.add_item("Item", 100.0)
     with pytest.raises(ValueError):
-        cart.apply_discount(discount)
+        cart_item.apply_discount(discount)
 
 
 def test_log_purchase(monkeypatch):

@@ -34,17 +34,18 @@ class RotatingLine:
         self.line = self.canvas.create_line(self.x, self.y, x2, y2, fill=color, width=3)
 
 
-def draw_tree(canvas, x, y, length, angle, depth):
+def draw_tree(canvas, point, length, angle, depth):
     if depth == 0:
         return
 
+    x, y = point
     x2 = x + length * math.cos(angle)
     y2 = y - length * math.sin(angle)
 
     canvas.create_line(x, y, x2, y2, fill="green")
 
-    draw_tree(canvas, x2, y2, length * 0.7, angle + math.pi / 6, depth - 1)
-    draw_tree(canvas, x2, y2, length * 0.7, angle - math.pi / 6, depth - 1)
+    draw_tree(canvas, (x2, y2), length * 0.7, angle + math.pi / 6, depth - 1)
+    draw_tree(canvas, (x2, y2), length * 0.7, angle - math.pi / 6, depth - 1)
 
 
 class App:
@@ -82,7 +83,7 @@ class App:
 
     def draw_fractal(self):
         self.canvas.delete("all")
-        draw_tree(self.canvas, WIDTH // 2, HEIGHT - 50, 100, math.pi / 2, 8)
+        draw_tree(self.canvas, (WIDTH // 2, HEIGHT - 50), 100, math.pi / 2, 8)
 
     def animate(self):
         if self.running:
